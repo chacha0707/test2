@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의 금융 캐릭터 찾기 테스트</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4vw;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px;
+      background-color: #1a73e8;
+      color: white;
+      border-radius: 10px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    .intro, .question, .result, .character {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .question h3 { color: #1a73e8; font-size: 1.1rem; }
+    .option { margin-bottom: 10px; padding: 14px; background: #f1f3f4; border-radius: 5px; font-size: 1rem; cursor: pointer; }
+    .option:hover { background-color: #e8f0fe; }
+    .submit-btn {
+      width: 100%; padding: 16px; font-size: 1.1rem; background: #1a73e8; color: white;
+      border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;
+    }
+    .submit-btn:hover { background-color: #1557b0; }
+    .character-image {
+      width: 100%; max-width: 200px; height: auto; margin: 0 auto 20px; display: block;
+      background-color: #fff; border-radius: 50%; padding: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 480px) {
+      h1 { font-size: 1.4rem; }
+      .question h3, .option, .submit-btn { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>나의 금융 캐릭터 찾기 테스트</h1>
+    <p>나는 어떤 금융 성향을 가지고 있을까? 지금 바로 테스트해보세요!</p>
+  </header>
+
+  <form id="testForm">
+    <div class="question">
+      <h3>Q1. 용돈을 받으면 주로 어떻게 하나요?</h3>
+      <div class="option"><input type="radio" name="q1" value="A" required> A. 바로 다 써버린다!</div>
+      <div class="option"><input type="radio" name="q1" value="B"> B. 일부는 쓰고, 일부는 모아둔다.</div>
+      <div class="option"><input type="radio" name="q1" value="C"> C. 대부분 저축한다.</div>
+      <div class="option"><input type="radio" name="q1" value="D"> D. 투자 방법을 찾아본다.</div>
+    </div>
+    <button type="submit" class="submit-btn">결과 확인하기</button>
+  </form>
+
+  <div class="result" id="resultSection" style="display:none;">
+    <h2>나의 금융 캐릭터 테스트 결과</h2>
+    <div id="resultContent"></div>
+
+    <div class="character" id="character-A" style="display:none;">
+      <h3>당신의 금융 캐릭터는 "쇼핑 요정" 입니다!</h3>
+      <img src="https://via.placeholder.com/200" class="character-image" />
+      <div class="character-description">즐거운 소비를 사랑하는 당신!</div>
+    </div>
+
+    <div class="character" id="character-B" style="display:none;">
+      <h3>당신의 금융 캐릭터는 "머니 밸런서" 입니다!</h3>
+      <img src="https://via.placeholder.com/200" class="character-image" />
+      <div class="character-description">수입과 지출의 균형을 중시하는 당신!</div>
+    </div>
+
+    <div class="character" id="character-C" style="display:none;">
+      <h3>당신의 금융 캐릭터는 "자산 지킴이" 입니다!</h3>
+      <img src="https://via.placeholder.com/200" class="character-image" />
+      <div class="character-description">신중한 계획으로 자산을 지키는 당신!</div>
+    </div>
+
+    <div class="character" id="character-D" style="display:none;">
+      <h3>당신의 금융 캐릭터는 "돈 마법사" 입니다!</h3>
+      <img src="https://via.placeholder.com/200" class="character-image" />
+      <div class="character-description">투자와 성장에 관심이 많은 당신!</div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("testForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const counts = { A: 0, B: 0, C: 0, D: 0 };
+      for (let [_, value] of formData.entries()) {
+        if (counts[value] !== undefined) counts[value]++;
+      }
+      const maxType = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+      document.getElementById("resultSection").style.display = "block";
+      ["A", "B", "C", "D"].forEach(type => {
+        const elem = document.getElementById("character-" + type);
+        if (elem) elem.style.display = "none";
+      });
+      const resultElem = document.getElementById("character-" + maxType);
+      if (resultElem) resultElem.style.display = "block";
+      document.getElementById("resultContent").innerHTML = `<p>대부분의 ${maxType}를 선택하셨군요!</p>`;
+    });
+  </script>
+</body>
+</html>
